@@ -7,15 +7,8 @@ var maxAttempts = 25;
 var userAttemptsCounter = 0;
 var itemsName = [];
 var votesNum = [];
+var displayNum = [];
 
-// // updating the maxAttempts
-// var form = document.getElementById("container");
-// form.addEventListener("submit", addingShop);
-
-// function addingShop(event) {
-//   var shopInputedName = event.target.shopNameInput.value;
-//   maxAttempts = shopInputedName;
-// }
 ///////////////////////////////////////
 var leftImageIndex;
 var midImageIndex;
@@ -70,13 +63,6 @@ function updatingAttempts(event) {
   maxAttempts = updatingNewMaxAttempts;
 }
 
-//------------- Add Event Listener to View the Result
-// var finalResult = document.getElementById("viewResults");
-// finalResult.addEventListener("click", viewResultFun);
-// function viewResultFun(event) {
-//   console.log(event);
-// }
-
 //------------Add Event Listener to count the vote AND rendering another three pictures
 
 var imgDiv = document.getElementById("images-div");
@@ -98,38 +84,12 @@ function handleUserClick(event) {
 
     renderThreeRandomImages();
   } else {
-    // handle end of voting
-    var resultsList = document.getElementById("results-list");
-    var mallResult;
-    for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
-      mallResult = document.createElement("li");
-      mallResult.textContent =
-        "The " +
-        MallImage.prototype.allImages[i].name +
-        " element has " +
-        MallImage.prototype.allImages[i].votes +
-        " votes, and it was displayed " +
-        MallImage.prototype.allImages[i].disblay +
-        " times";
-      resultsList.appendChild(mallResult);
-    }
     imgDiv.removeEventListener("click", handleUserClick);
-    console.log(removeEventListener("click", handleUserClick));
-
-    // for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
-    //   votesNum.push(MallImage.prototype.allImages[i].votes);
-    // }
+    viewing();
     // chart.config.data.datasets[0].data = votesNum;
   }
 }
-//-------------- handle div to get the id of showing images
-// var imgDiv = document.getElementById("images-div");
-// imgDiv.addEventListener("load", callDiv);
 
-// function callDiv(event) {
-//   console.log(event);
-// }
-// callDiv;
 //...................... render and do not dublicate the content.....
 var imgIndex = [];
 renderThreeRandomImages();
@@ -163,25 +123,28 @@ function generateRandomIndex() {
 }
 
 //----------- Adding a chrt for Result------------
-
-var ctx = document.getElementById("myChart").getContext("2d");
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: "line",
-
-  // The data for our dataset
-  data: {
-    labels: itemsName,
-    datasets: [
-      {
-        label: "My First dataset",
-        backgroundColor: "rgb(255, 99, 132)",
-        borderColor: "rgb(255, 99, 132)",
-        data: votesNum,
-      },
-    ],
-  },
-
-  // Configuration options go here
-  options: {},
-});
+function viewing() {
+  for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
+    votesNum.push(MallImage.prototype.allImages[i].votes);
+    displayNum.push(MallImage.prototype.allImages[i].disblay);
+  }
+  var ctx = document.getElementById("myChart").getContext("2d");
+  var chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: itemsName,
+      datasets: [
+        {
+          label: "Number of Displaying",
+          backgroundColor: "rgb(0, 197, 106)",
+          data: displayNum,
+        },
+        {
+          label: "Number of Voting",
+          backgroundColor: "rgb(255, 114, 107)",
+          data: votesNum,
+        },
+      ],
+    },
+  });
+}
