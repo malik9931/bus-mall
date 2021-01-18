@@ -63,6 +63,10 @@ function updatingAttempts(event) {
   maxAttempts = updatingNewMaxAttempts;
 }
 
+//------------- Add Event Listener to Disabled the Result Button
+var finalResult = document.getElementById("finalResult");
+finalResult.addEventListener("click", showResult);
+
 //------------Add Event Listener to count the vote AND rendering another three pictures
 
 var imgDiv = document.getElementById("images-div");
@@ -84,8 +88,9 @@ function handleUserClick(event) {
 
     renderThreeRandomImages();
   } else {
+    finalResult.removeAttribute("disabled");
     imgDiv.removeEventListener("click", handleUserClick);
-    viewing();
+
     // chart.config.data.datasets[0].data = votesNum;
   }
 }
@@ -122,8 +127,8 @@ function generateRandomIndex() {
   return Math.floor(Math.random() * MallImage.prototype.allImages.length);
 }
 
-//----------- Adding a chrt for Result------------
-function viewing() {
+//----------- Adding a Result as a Chart ------------
+function showResult() {
   for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
     votesNum.push(MallImage.prototype.allImages[i].votes);
     displayNum.push(MallImage.prototype.allImages[i].disblay);
