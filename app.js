@@ -3,7 +3,7 @@
 var leftImageElement = document.getElementById("left-image");
 var midImageElement = document.getElementById("mid-image");
 var rightImageElement = document.getElementById("right-image");
-var maxAttempts = 5;
+var maxAttempts = 25;
 var userAttemptsCounter = 0;
 
 // // updating the maxAttempts
@@ -18,6 +18,9 @@ var userAttemptsCounter = 0;
 var leftImageIndex;
 var midImageIndex;
 var rightImageIndex;
+var leftImageDisplay;
+var midImageDisplay;
+var rightImageDisplay;
 
 function MallImage(name, source) {
   this.name = name;
@@ -55,43 +58,72 @@ new MallImage("wine-glass", "img/wine-glass.jpg");
 
 console.log(MallImage.prototype.allImages);
 
-/////////////----------------------------------------------------
+//................ Add Event Listener to take the max attempts from the form
+var maxAttemptsForm = document.getElementById("maxAttempt");
+maxAttemptsForm.addEventListener("submit", updatingAttempts);
 
-leftImageElement.addEventListener("click", handleUserClick);
-midImageElement.addEventListener("click", handleUserClick);
-rightImageElement.addEventListener("click", handleUserClick);
+function updatingAttempts(event) {
+  event.preventDefault();
+  var updatingNewMaxAttempts = event.target.newAttempts.value;
+  console.log(event.target.newAttempts.value);
+  maxAttempts = updatingNewMaxAttempts;
+}
+
+//------------- Add Event Listener to View the Result
+var finalResult = document.getElementById("viewResults");
+finalResult.addEventListener("click", viewResultFun);
+function viewResultFun(event) {
+  console.log(event);
+}
+
+//------------Add Event Listener to count the vote AND rendering another three pictures
+
+var imgDiv = document.getElementById("images-div");
+imgDiv.addEventListener("click", handleUserClick);
 
 function handleUserClick(event) {
-  userAttemptsCounter++;
-
-  if (userAttemptsCounter <= maxAttempts) {
+  // console.log(event);
+  if (userAttemptsCounter < maxAttempts) {
     if (event.target.id === "left-image") {
       MallImage.prototype.allImages[leftImageIndex].votes++;
+      userAttemptsCounter++;
     } else if (event.target.id === "mid-image") {
       MallImage.prototype.allImages[midImageIndex].votes++;
+      userAttemptsCounter++;
     } else {
       MallImage.prototype.allImages[rightImageIndex].votes++;
+      userAttemptsCounter++;
     }
 
     renderThreeRandomImages();
   } else {
     // handle end of voting
+    function view(params) {}
     var resultsList = document.getElementById("results-list");
     var mallResult;
     for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
       mallResult = document.createElement("li");
       mallResult.textContent =
+        "The " +
         MallImage.prototype.allImages[i].name +
-        "has " +
+        " element has " +
         MallImage.prototype.allImages[i].votes +
-        " votes";
+        " votes, and it was displayed " +
+        MallImage.prototype.allImages[i].disblay +
+        " times";
       resultsList.appendChild(mallResult);
     }
-    rightImageElement.removeEventListener("click", handleUserClick);
-    leftImageElement.removeEventListener("click", handleUserClick);
+    imgDiv.removeEventListener("click", handleUserClick);
   }
 }
+//-------------- handle div to get the id of showing images
+// var imgDiv = document.getElementById("images-div");
+// imgDiv.addEventListener("load", callDiv);
 
+// function callDiv(event) {
+//   console.log(event);
+// }
+// callDiv;
 //...................... render and do not dublicate the content.....
 var imgIndex = [];
 renderThreeRandomImages();
@@ -111,8 +143,11 @@ function renderThreeRandomImages() {
   );
 
   leftImageElement.src = MallImage.prototype.allImages[leftImageIndex].source;
+  leftImageDisplay = MallImage.prototype.allImages[leftImageIndex].disblay++;
   midImageElement.src = MallImage.prototype.allImages[midImageIndex].source;
+  midImageDisplay = MallImage.prototype.allImages[midImageIndex].disblay++;
   rightImageElement.src = MallImage.prototype.allImages[rightImageIndex].source;
+  rightImageDisplay = MallImage.prototype.allImages[rightImageIndex].disblay++;
 }
 
 //--------------------- function generate random number ---------------
