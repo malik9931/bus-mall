@@ -69,13 +69,9 @@ function updatingAttempts(event) {
   maxAttempts = updatingNewMaxAttempts;
 }
 
-//------------- Add Event Listener to View the Result
-var finalResult = document.getElementById("viewResults");
-finalResult.addEventListener("click", viewResultFun);
-function viewResultFun(event) {
-  console.log(event);
-}
-
+//------------- Add Event Listener to Disabled the Result Button
+var finalResult = document.getElementById("finalResult");
+finalResult.addEventListener("click", showResult);
 //------------Add Event Listener to count the vote AND rendering another three pictures
 
 var imgDiv = document.getElementById("images-div");
@@ -97,33 +93,30 @@ function handleUserClick(event) {
 
     renderThreeRandomImages();
   } else {
-    // handle end of voting
-    function view(params) {}
-    var resultsList = document.getElementById("results-list");
-    var mallResult;
-    for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
-      mallResult = document.createElement("li");
-      mallResult.textContent =
-        "The " +
-        MallImage.prototype.allImages[i].name +
-        " element has " +
-        MallImage.prototype.allImages[i].votes +
-        " votes, and it was displayed " +
-        MallImage.prototype.allImages[i].disblay +
-        " times";
-      resultsList.appendChild(mallResult);
-    }
+    finalResult.removeAttribute("disabled");
     imgDiv.removeEventListener("click", handleUserClick);
   }
 }
-//-------------- handle div to get the id of showing images
-// var imgDiv = document.getElementById("images-div");
-// imgDiv.addEventListener("load", callDiv);
+//-------------- Show Result Function
+function showResult() {
+  // handle end of voting
+  var resultsList = document.getElementById("results-list");
+  var mallResult;
+  for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
+    mallResult = document.createElement("li");
+    mallResult.textContent =
+      "The " +
+      MallImage.prototype.allImages[i].name +
+      " element has " +
+      MallImage.prototype.allImages[i].votes +
+      " votes, and it was displayed " +
+      MallImage.prototype.allImages[i].disblay +
+      " times";
+    resultsList.appendChild(mallResult);
+  }
+  stop();
+}
 
-// function callDiv(event) {
-//   console.log(event);
-// }
-// callDiv;
 //...................... render and do not dublicate the content.....
 var imgIndex = [];
 renderThreeRandomImages();
