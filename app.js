@@ -96,22 +96,31 @@ function handleUserClick(event) {
 }
 
 //...................... render and do not dublicate the content.....
-var imgIndex = [];
+var prevLeftIndex = -1;
+var prevMidIndex = -1;
+var prevRightIndex = -1;
 renderThreeRandomImages();
 function renderThreeRandomImages() {
-  leftImageIndex = generateRandomIndex();
+  var imgIndex = [prevLeftIndex, prevMidIndex, prevRightIndex];
+
+  do {
+    leftImageIndex = generateRandomIndex();
+  } while (imgIndex.includes(leftImageIndex));
+  prevLeftIndex = leftImageIndex;
   imgIndex.push(leftImageIndex);
+
   do {
     midImageIndex = generateRandomIndex();
-    imgIndex.push(midImageIndex);
+  } while (imgIndex.includes(midImageIndex));
+  prevMidIndex = midImageIndex;
+  imgIndex.push(midImageIndex);
 
+  do {
     rightImageIndex = generateRandomIndex();
-    imgIndex.push(rightImageIndex);
-  } while (
-    leftImageIndex === rightImageIndex ||
-    leftImageIndex === midImageIndex ||
-    midImageIndex === rightImageIndex
-  );
+  } while (imgIndex.includes(rightImageIndex));
+  prevRightIndex = rightImageIndex;
+
+  console.log(imgIndex);
 
   leftImageElement.src = MallImage.prototype.allImages[leftImageIndex].source;
   leftImageDisplay = MallImage.prototype.allImages[leftImageIndex].disblay++;
