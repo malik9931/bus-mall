@@ -52,6 +52,8 @@ new MallImage("usb", "img/usb.gif");
 new MallImage("water-can", "img/water-can.jpg");
 new MallImage("wine-glass", "img/wine-glass.jpg");
 
+//
+
 //................ Add Event Listener to take the max attempts from the form
 var maxAttemptsForm = document.getElementById("maxAttempt");
 maxAttemptsForm.addEventListener("submit", updatingAttempts);
@@ -76,14 +78,21 @@ function handleUserClick(event) {
   // console.log(event);
   if (userAttemptsCounter < maxAttempts) {
     if (event.target.id === "left-image") {
+      // console.log("this is the  ", event.target.id);
+
       MallImage.prototype.allImages[leftImageIndex].votes++;
       userAttemptsCounter++;
     } else if (event.target.id === "mid-image") {
+      // console.log("this is the  ", event.target.id);
       MallImage.prototype.allImages[midImageIndex].votes++;
       userAttemptsCounter++;
-    } else {
+    } else if (event.target.id === "right-image") {
+      // console.log("this is the right ", event.target.id);
       MallImage.prototype.allImages[rightImageIndex].votes++;
       userAttemptsCounter++;
+    } else {
+      alert("click on the picture");
+      event.preventDefault();
     }
 
     renderThreeRandomImages();
@@ -120,7 +129,10 @@ function renderThreeRandomImages() {
   } while (imgIndex.includes(rightImageIndex));
   prevRightIndex = rightImageIndex;
 
-  console.log(imgIndex);
+  // localStorage.setItem(
+  //   "itemsObj",
+  //   JSON.stringify(MallImage.prototype.allImages)
+  // );
 
   leftImageElement.src = MallImage.prototype.allImages[leftImageIndex].source;
   leftImageDisplay = MallImage.prototype.allImages[leftImageIndex].disblay++;
@@ -142,7 +154,8 @@ function showResult() {
     votesNum.push(MallImage.prototype.allImages[i].votes);
     displayNum.push(MallImage.prototype.allImages[i].disblay);
   }
-  var ctx = document.getElementById("myChart").getContext("2d");
+  console.log(MallImage.prototype.allImages);
+  var ctx = document.getElementById("everyRound").getContext("2d");
   var chart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -150,15 +163,60 @@ function showResult() {
       datasets: [
         {
           label: "Number of Displaying",
-          backgroundColor: "rgb(0, 197, 106)",
+          backgroundColor: "rgb(33, 186, 193)",
           data: displayNum,
         },
         {
           label: "Number of Voting",
+          backgroundColor: "rgb(207, 250, 117)",
+          data: votesNum,
+        },
+      ],
+    },
+  });
+  localStorage.setItem(
+    "itemsObj2",
+    JSON.stringify(MallImage.prototype.allImages)
+  );
+  getData();
+}
+
+// var products localStorage
+var list;
+var jsList;
+getData();
+function getData() {
+  list = localStorage.getItem("itemsObj2");
+  jsList = JSON.parse(list);
+
+  if (jsList) {
+    MallImage.prototype.allImages = jsList;
+  }
+  for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
+    votesNum.push(MallImage.prototype.allImages[i].votes);
+    displayNum.push(MallImage.prototype.allImages[i].disblay);
+  }
+  var ctx = document.getElementById("comulativeRound").getContext("2d");
+  var chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: itemsName,
+      datasets: [
+        {
+          label: "Comulative Number of Displaying",
+          backgroundColor: "rgb(0, 197, 106)",
+          data: displayNum,
+        },
+        {
+          label: "Comulative Number of Voting",
           backgroundColor: "rgb(255, 114, 107)",
           data: votesNum,
         },
       ],
     },
   });
+  localStorage.setItem(
+    "itemsObj2",
+    JSON.stringify(MallImage.prototype.allImages)
+  );
 }
