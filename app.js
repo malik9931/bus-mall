@@ -78,21 +78,17 @@ function handleUserClick(event) {
   // console.log(event);
   if (userAttemptsCounter < maxAttempts) {
     if (event.target.id === "left-image") {
-      // console.log("this is the  ", event.target.id);
-
       MallImage.prototype.allImages[leftImageIndex].votes++;
       userAttemptsCounter++;
     } else if (event.target.id === "mid-image") {
-      // console.log("this is the  ", event.target.id);
       MallImage.prototype.allImages[midImageIndex].votes++;
       userAttemptsCounter++;
     } else if (event.target.id === "right-image") {
-      // console.log("this is the right ", event.target.id);
       MallImage.prototype.allImages[rightImageIndex].votes++;
       userAttemptsCounter++;
     } else {
-      alert("click on the picture");
-      event.preventDefault();
+      alert("Click on the picture");
+      handleUserClick();
     }
 
     renderThreeRandomImages();
@@ -128,11 +124,6 @@ function renderThreeRandomImages() {
     rightImageIndex = generateRandomIndex();
   } while (imgIndex.includes(rightImageIndex));
   prevRightIndex = rightImageIndex;
-
-  // localStorage.setItem(
-  //   "itemsObj",
-  //   JSON.stringify(MallImage.prototype.allImages)
-  // );
 
   leftImageElement.src = MallImage.prototype.allImages[leftImageIndex].source;
   leftImageDisplay = MallImage.prototype.allImages[leftImageIndex].disblay++;
@@ -178,7 +169,8 @@ function showResult() {
     "itemsObj2",
     JSON.stringify(MallImage.prototype.allImages)
   );
-  getData();
+
+  // location.reload();
 }
 
 // var products localStorage
@@ -192,31 +184,4 @@ function getData() {
   if (jsList) {
     MallImage.prototype.allImages = jsList;
   }
-  for (var i = 0; i < MallImage.prototype.allImages.length; i++) {
-    votesNum.push(MallImage.prototype.allImages[i].votes);
-    displayNum.push(MallImage.prototype.allImages[i].disblay);
-  }
-  var ctx = document.getElementById("comulativeRound").getContext("2d");
-  var chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: itemsName,
-      datasets: [
-        {
-          label: "Comulative Number of Displaying",
-          backgroundColor: "rgb(0, 197, 106)",
-          data: displayNum,
-        },
-        {
-          label: "Comulative Number of Voting",
-          backgroundColor: "rgb(255, 114, 107)",
-          data: votesNum,
-        },
-      ],
-    },
-  });
-  localStorage.setItem(
-    "itemsObj2",
-    JSON.stringify(MallImage.prototype.allImages)
-  );
 }
